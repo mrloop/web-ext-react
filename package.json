@@ -1,0 +1,24 @@
+{
+  "name": "web-ext-react",
+  "version": "1.0.0",
+  "description": "Command line tool to help build, run and test ReactJS based WebExtensions",
+  "main": "index.js",
+  "bin": {
+    "web-ext-react": "bin/web-ext-react"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "reactjs",
+    "javascript",
+    "web-ext",
+    "webextensions"
+  ],
+  "author": "mrloop",
+  "license": "ISC",
+  "devDependencies": {
+    "@cnakazawa/watch": "^1.0.4",
+    "cpy": "^8.1.0"
+  }
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+
+var WebExtReact = require('../index.js');
+var webExtReact = new WebExtReact();
+var fncName = process.argv[2];
+webExtReact[fncName]();
