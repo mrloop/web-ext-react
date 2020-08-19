@@ -7,7 +7,8 @@
     "web-ext-react": "bin/web-ext-react"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint index.js",
+    "test": "qunit tests/unit/*-test.js"
   },
   "keywords": [
     "reactjs",
@@ -17,8 +18,52 @@
   ],
   "author": "mrloop",
   "license": "ISC",
-  "devDependencies": {
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018
+    }
+  },
+  "prettier": {
+    "trailingComma": "es5"
+  },
+  "lint-staged": {
+    "*.+(js|jsx)": [
+      "eslint --fix"
+    ],
+    "*.+(json|css|md)": [
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
     "@cnakazawa/watch": "^1.0.4",
-    "cpy": "^8.1.0"
+    "cpy": "^8.1.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
+    "babel-eslint": "^10.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "qunit": "^2.11.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   }
 }

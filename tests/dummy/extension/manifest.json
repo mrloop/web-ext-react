@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "web-ext-react dummy app",
+  "version": "0.1",
+
+  "description": "dummy app to test web-ext-react",
+  "homepage_url": "https://github.com/mrloop/web-ext-react",
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*"],
+      "js": [],
+      "css": []
+    }
+  ],
+  "background": {
+    "page": "background-page.html"
+  }
+}
