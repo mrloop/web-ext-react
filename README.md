@@ -1,3 +1,5 @@
+![Node.js CI](https://github.com/mrloop/web-ext-react/workflows/Node.js%20CI/badge.svg)
+
 # web-ext-react
 
 A CLI tool to help build and run [ReactJS](https://reactjs.org/) based [WebExtensions](), integrating [web-ext](https://github.com/mozilla/web-ext) with [create-react-app](https://github.com/facebook/create-react-app)
