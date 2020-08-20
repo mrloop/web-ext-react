@@ -49,13 +49,16 @@ mod("build", (hooks) => {
     });
 
     test("content_scripts", (assert) => {
-      assert.equal(this.manifest.content_scripts[0].js.length, 3);
-      [/runtime-main.*.js/, /2.*.chunk.js/, /main.*.chunk.js/].forEach(
-        (regex, index) => {
-          let script = this.manifest.content_scripts[0].js[index];
-          assert.ok(regex.test(script), script);
-        }
-      );
+      assert.equal(this.manifest.content_scripts[0].js.length, 4);
+      [
+        /is-content-scripts.js/,
+        /runtime-main.*.js/,
+        /2.*.chunk.js/,
+        /main.*.chunk.js/,
+      ].forEach((regex, index) => {
+        let script = this.manifest.content_scripts[0].js[index];
+        assert.ok(regex.test(script), script);
+      });
     });
 
     test("background", (assert) => {

@@ -14,6 +14,10 @@ class WebExtReact {
     return path.join("build", "asset-manifest.json");
   }
 
+  get extensionPath() {
+    return "extension";
+  }
+
   get tmp() {
     this._tmp =
       this._tmp || fs.mkdtempSync(path.join(os.tmpdir(), "web-ext-react-"));
@@ -28,6 +32,7 @@ class WebExtReact {
     <!-- INSERT-HEAD -->
   </head>
   <body>
+    <div id="root"></div>
     <!-- INSERT-BODY -->
   </body>
 </html>`;
@@ -50,7 +55,7 @@ class WebExtReact {
     }
     if (fs.existsSync(this.assetManifestPath)) {
       this._extManifest = JSON.parse(
-        fs.readFileSync("extension/manifest.json")
+        fs.readFileSync(path.join(this.extensionPath, "manifest.json"))
       );
     }
     return this._extManifest;
@@ -67,29 +72,41 @@ class WebExtReact {
 
   addHtml() {
     // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension#Sidebars_popups_options_pages
-    ["background", "sidebar_action", "browser_action", "options_ui"].forEach(
-      (data) => {
-        if (this.extManifest[data]) {
-          data = data.replace("_", "-");
-          let page =
-            this.extManifest[data].page ||
-            this.extManifest[data].default_popup ||
-            this.extManifest[data].default_panel;
-          fs.writeFileSync(`${this.tmp}/${page}`, this.html(data));
-        }
+    [
+      "background",
+      "page_action",
+      "sidebar_action",
+      "browser_action",
+      "options_ui",
+    ].forEach((data) => {
+      if (this.extManifest[data]) {
+        let page =
+          this.extManifest[data].page ||
+          this.extManifest[data].default_popup ||
+          this.extManifest[data].default_panel;
+        data = data.replace("_", "-");
+        fs.writeFileSync(`${this.tmp}/${page}`, this.html(data));
+        this.writeHelperScriptContents(data);
       }
-    );
+    });
   }
 
   addContentScript() {
     this.extManifest.content_scripts[0].js = this.contentByExtension(".js");
+    this.extManifest.content_scripts[0].js.unshift(
+      this.helperScriptFileName("content_scripts")
+    );
+    this.writeHelperScriptContents("content_scripts");
     this.extManifest.content_scripts[0].css = this.contentByExtension(".css");
   }
 
-  html(data) {
-    const scriptJs = this.contentByExtension(".js")
-      .map((str) => `<script type="module" src="${str}" data-${data}></script>`)
+  html(scriptType) {
+    let scriptJs = this.contentByExtension(".js")
+      .map(this.scriptTag)
       .join("\n");
+    scriptJs = `${this.scriptTag(
+      this.helperScriptFileName(scriptType)
+    )}\n${scriptJs}`;
     const linkCss = this.contentByExtension(".css")
       .map((str) => `<link rel="stylesheet" href="${str}"/>`)
       .join("\n");
@@ -98,7 +115,33 @@ class WebExtReact {
       .replace("<!-- INSERT-BODY -->", scriptJs);
   }
 
+  scriptTag(src) {
+    return `<script src="${src}"></script>`;
+  }
+
+  helperScriptFileName(scriptType) {
+    const name = scriptType.replace("_", "-");
+    return `is-${name}.js`;
+  }
+
+  writeHelperScriptContents(scriptType) {
+    // add helper script for identifying what context script being called from
+    const name = scriptType
+      .replace("_", "-")
+      .replace(/\b\w/g, (c) => c.toUpperCase())
+      .replace("-", "");
+    fs.writeFileSync(
+      path.join(this.tmp, this.helperScriptFileName(scriptType)),
+      `document.is${name}=true`
+    );
+  }
+
   async bundleExt() {
+    await cpy(".", path.join(this.tmp), {
+      parents: true,
+      cwd: this.extensionPath,
+    });
+    // overwrite extension manifest
     fs.writeFileSync(
       path.join(this.tmp, "manifest.json"),
       JSON.stringify(this.extManifest)
