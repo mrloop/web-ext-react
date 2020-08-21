@@ -19,8 +19,8 @@ mod("build", (hooks) => {
     process.chdir(this.cwd);
   });
 
-  test("it builds app", (assert) => {
-    this.webExtReact.buildApp();
+  test("it builds app", async (assert) => {
+    await this.webExtReact.buildApp();
     assert.ok(fs.existsSync(this.buildPath), "build dir exists");
     assert.ok(
       fs.existsSync(
@@ -67,6 +67,37 @@ mod("build", (hooks) => {
       assert.ok(
         fs.existsSync(backgroundPagePath),
         `${backgroundPagePath} exists`
+      );
+    });
+  });
+
+  mod("browser action only", (hooks) => {
+    hooks.beforeEach(() => {
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get#Defining_a_getter_on_existing_objects_using_defineProperty
+      Object.defineProperty(this.webExtReact, "extManifest", {
+        get: function () {
+          return {
+            browser_action: {
+              default_popup: "popup.html",
+            },
+          };
+        },
+      });
+    });
+
+    test("it builds ext", async (assert) => {
+      this.extDir = await this.webExtReact.build();
+      assert.ok(
+        fs.existsSync(path.join(this.extDir, "manifest.json")),
+        "manifest.json exists"
+      );
+
+      const popupPath = path.join(this.extDir, "popup.html");
+      assert.ok(fs.existsSync(popupPath), `${popupPath} exists`);
+      const backgroundPagePath = path.join(this.extDir, "background-page.html");
+      assert.notOk(
+        fs.existsSync(backgroundPagePath),
+        `${backgroundPagePath} doesn't exists`
       );
     });
   });

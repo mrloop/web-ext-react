@@ -92,12 +92,17 @@ class WebExtReact {
   }
 
   addContentScript() {
-    this.extManifest.content_scripts[0].js = this.contentByExtension(".js");
-    this.extManifest.content_scripts[0].js.unshift(
-      this.helperScriptFileName("content_scripts")
-    );
-    this.writeHelperScriptContents("content_scripts");
-    this.extManifest.content_scripts[0].css = this.contentByExtension(".css");
+    if (
+      this.extManifest.content_scripts &&
+      this.extManifest.content_scripts[0]
+    ) {
+      this.extManifest.content_scripts[0].js = this.contentByExtension(".js");
+      this.extManifest.content_scripts[0].js.unshift(
+        this.helperScriptFileName("content_scripts")
+      );
+      this.writeHelperScriptContents("content_scripts");
+      this.extManifest.content_scripts[0].css = this.contentByExtension(".css");
+    }
   }
 
   html(scriptType) {
