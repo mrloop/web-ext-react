@@ -4,7 +4,16 @@
 
 A CLI tool to help build and run [ReactJS](https://reactjs.org/) based [WebExtensions](), integrating [web-ext](https://github.com/mozilla/web-ext) with [create-react-app](https://github.com/facebook/create-react-app)
 
-**This is a work in progress** extracted from [race-ext-react](mrloop/race-ext-react). Ideally `web-ext-react` would wrap `web-ext` and work as a drop in replacement for better ergonomics, while adding the additional React functionality.
+## Highlights
+
+Create ReactJS Web Extensions with no build configuration.
+
+- No forked dependencies, uses [create-react-app](https://github.com/facebook/create-react-app) and [web-ext](https://github.com/mozilla/web-ext) as is, enabling you to easily keep up to date.
+- Live reload of JavaScript and CSS as you work on your extension.
+
+## Limitations
+
+**This is a work in progress** extracted from [race-ext-react](https://github.com/mrloop/race-ext-react). Ideally `web-ext-react` would wrap `web-ext` and work as a drop in replacement for better ergonomics, while adding the additional React functionality.
 
 ## Documentation
 
