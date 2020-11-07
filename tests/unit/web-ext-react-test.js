@@ -20,7 +20,7 @@ mod("build", (hooks) => {
   });
 
   test("it builds app", async (assert) => {
-    await this.webExtReact.buildApp();
+    this.webExtReact.buildApp();
     assert.ok(fs.existsSync(this.buildPath), "build dir exists");
     assert.ok(
       fs.existsSync(
