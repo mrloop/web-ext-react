@@ -6,6 +6,10 @@ const watch = require("@cnakazawa/watch");
 const { execSync } = require("child_process");
 
 class WebExtReact {
+  constructor() {
+    this.buildNum = 0;
+  }
+
   get buildPath() {
     return path.join(process.cwd(), "build", "static");
   }
@@ -66,6 +70,7 @@ class WebExtReact {
       this.addContentScript();
       await this.bundleExt();
       this.addHtml();
+      this.buildNum++;
       return this.tmp;
     }
   }
@@ -185,7 +190,9 @@ class WebExtReact {
       },
       async () => {
         const sourceDir = await this.buildExt();
-        process.stdout.write(`${sourceDir}\n`);
+        if (this.buildNum === 1) {
+          process.stdout.write(`${sourceDir}\n`);
+        }
       }
     );
   }

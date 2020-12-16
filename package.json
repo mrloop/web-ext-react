@@ -1,6 +1,6 @@
 {
   "name": "web-ext-react",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "description": "Command line tool to help build, run and test ReactJS based WebExtensions",
   "main": "index.js",
   "bin": {
