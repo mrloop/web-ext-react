@@ -2,7 +2,7 @@
 
 # web-ext-react
 
-A CLI tool to help build and run [ReactJS](https://reactjs.org/) based [WebExtensions](), integrating [web-ext](https://github.com/mozilla/web-ext) with [create-react-app](https://github.com/facebook/create-react-app)
+A CLI tool to help build and run [ReactJS](https://reactjs.org/) based [WebExtensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions), integrating [web-ext](https://github.com/mozilla/web-ext) with [create-react-app](https://github.com/facebook/create-react-app)
 
 ## Highlights
 
@@ -97,7 +97,7 @@ You must create an `extension/manifest.json`
   },
   "content_scripts": [
     {
-      "matches": ["*"],
+      "matches": ["<all_urls>"],
       "js": [],
       "css": []
     }
